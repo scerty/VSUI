@@ -1,0 +1,7 @@
+{
+  "name": "ssb-backend",
+  "description": "Django REST API for SSB (Syrian Student Bureau) Applications",
+  "version": "1.0.0",
+  "type": "application",
+  "python_version": "3.9+"
+}

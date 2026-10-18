@@ -1,0 +1,138 @@
+import { type FC } from 'react';
+
+interface NewsItem {
+  category: string;
+  date: string;
+  views: string;
+  title: string;
+  description: string;
+  image: string;
+  categoryColor: string;
+}
+
+const News: FC = () => {
+  const newsItems: NewsItem[] = [
+    {
+      category: "منح دراسية",
+      date: "2 نوفمبر 2025",
+      views: "1.2K",
+      title: "منحة ممولة بالكامل للدراسات العليا في جامعة كامبريدج",
+      description: "فرصة مميزة للطلاب السوريين للحصول على منحة دراسية كاملة تشمل الرسوم الدراسية والسكن والمعيشة",
+      image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&auto=format&fit=crop&q=60",
+      categoryColor: "yellow"
+    },
+    {
+      category: "فرص تدريب",
+      date: "1 نوفمبر 2025",
+      views: "856",
+      title: "برنامج التدريب الصيفي في شركة مايكروسوفت",
+      description: "فتح باب التقديم للتدريب الصيفي في مايكروسوفت لطلاب علوم الحاسوب والهندسة",
+      image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&auto=format&fit=crop&q=60",
+      categoryColor: "green"
+    },
+    {
+      category: "مسابقات",
+      date: "31 أكتوبر 2025",
+      views: "642",
+      title: "مسابقة البرمجة السنوية للطلاب السوريين",
+      description: "انطلاق مسابقة البرمجة السنوية بجوائز قيمة وفرص توظيف مباشرة للفائزين",
+      image: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&auto=format&fit=crop&q=60",
+      categoryColor: "purple"
+    }
+  ];
+
+  const categories = ["جميع الأخبار", "منح دراسية", "فرص تدريب", "مسابقات", "نشاطات طلابية"];
+
+  return (
+    <section className="relative py-24 bg-white">
+      <div className="mx-auto w-full max-w-[1200px] px-4 md:px-8">
+        {/* Heading */}
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">آخر الأخبار والمستجدات</h2>
+          <p className="text-lg text-slate-600">اطلع على أحدث الأخبار والفرص المتاحة للطلاب</p>
+        </div>
+
+        {/* Categories */}
+        <div className="flex flex-wrap items-center justify-center gap-3 mb-12">
+          {categories.map((category, index) => (
+            <button
+              key={index}
+              className={`px-6 py-2.5 rounded-full font-medium transition-all ${
+                index === 0
+                  ? 'bg-yellow-500 text-white hover:bg-blue-500'
+                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+              }`}
+            >
+              {category}
+            </button>
+          ))}
+        </div>
+
+        {/* News Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {newsItems.map((item, index) => (
+            <NewsCard key={index} {...item} />
+          ))}
+        </div>
+
+        {/* View More Button */}
+        <div className="mt-12 text-center">
+          <a href="#" className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800 transition-all group">
+            عرض جميع الأخبار
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const NewsCard: FC<NewsItem> = ({ category, date, views, title, description, image, categoryColor }) => (
+  <article className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+    <div className="relative overflow-hidden aspect-[16/9]">
+      <img
+        src={image}
+        alt={title}
+        className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+      />
+      <span className={`absolute top-4 right-4 px-3 py-1.5 rounded-full text-sm font-medium bg-${categoryColor}-400 text-slate-900`}>
+        {category}
+      </span>
+    </div>
+    <div className="p-6">
+      <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
+        {title}
+      </h3>
+      <p className="text-gray-600 mb-4 line-clamp-2">
+        {description}
+      </p>
+      <div className="flex items-center gap-4 text-sm text-gray-500">
+        <span className="flex items-center gap-1">
+          <CalendarIcon />
+          {date}
+        </span>
+        <span className="flex items-center gap-1">
+          <EyeIcon />
+          {views} مشاهدة
+        </span>
+      </div>
+    </div>
+  </article>
+);
+
+const CalendarIcon: FC = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+  </svg>
+);
+
+const EyeIcon: FC = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+  </svg>
+);
+
+export default News;

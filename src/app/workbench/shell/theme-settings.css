@@ -1,0 +1,40 @@
+:host { display: contents; }
+.theme-settings-backdrop { position: fixed; z-index: 9; inset: 0; display: flex; justify-content: flex-end; padding: 45px 10px 10px; background: rgb(0 0 0 / 28%); }
+.theme-settings { width: min(460px, calc(100vw - 20px)); max-height: calc(100vh - 55px); overflow: auto; border: 1px solid var(--wb-border-strong); border-radius: 6px; background: var(--wb-surface-raised); box-shadow: 0 18px 45px rgb(0 0 0 / 32%); }
+.theme-settings-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; padding: 16px 17px 14px; border-bottom: 1px solid var(--wb-border); }
+.theme-settings-eyebrow { color: var(--wb-accent); font-size: .54rem; font-weight: 700; letter-spacing: .1em; }
+.theme-settings-header h2 { margin: 5px 0 3px; color: var(--wb-text); font-size: .92rem; font-weight: 600; }
+.theme-settings-header p { margin: 0; color: var(--wb-muted); font-size: .62rem; }
+.theme-presets { padding: 11px 10px 10px; border-bottom: 1px solid var(--wb-border); }
+.theme-section-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 0 2px 7px; }
+.theme-section-heading strong { color: var(--wb-text); font-size: .63rem; font-weight: 600; }
+.theme-section-heading small { color: var(--wb-muted); font-size: .53rem; }
+.preset-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; }
+.preset-card { position: relative; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 7px; min-width: 0; padding: 7px; border: 1px solid var(--wb-border); border-radius: 4px; color: var(--wb-muted); background: var(--wb-surface); cursor: pointer; font: inherit; text-align: left; }
+.preset-card:hover, .preset-card.active { color: var(--wb-text); border-color: var(--wb-accent); background: var(--wb-accent-soft); }
+.preset-swatches { display: grid; grid-template-columns: repeat(2, 10px); grid-template-rows: repeat(2, 10px); overflow: hidden; border: 1px solid var(--wb-border-strong); border-radius: 3px; }
+.preset-swatches span { width: 10px; height: 10px; }
+.preset-copy { display: grid; min-width: 0; gap: 2px; }
+.preset-copy strong { overflow: hidden; color: inherit; font-size: .6rem; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.preset-copy small { overflow: hidden; color: var(--wb-muted); font-size: .5rem; text-overflow: ellipsis; white-space: nowrap; }
+.preset-check { position: absolute; top: 5px; right: 5px; color: var(--wb-accent); }
+.theme-color-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; padding: 8px; background: var(--wb-border); }
+.theme-color-control { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0; padding: 9px 8px; background: var(--wb-surface-raised); cursor: pointer; }
+.theme-color-control:hover { background: var(--wb-surface-hover); }
+.theme-color-copy { display: grid; min-width: 0; gap: 2px; }
+.theme-color-copy strong { overflow: hidden; color: var(--wb-text); font-size: .62rem; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.theme-color-copy small { overflow: hidden; color: var(--wb-muted); font-size: .52rem; text-overflow: ellipsis; white-space: nowrap; }
+.theme-color-input { display: inline-flex; align-items: center; gap: 5px; flex: 0 0 auto; }
+.theme-color-swatch { width: 17px; height: 17px; border: 1px solid var(--wb-border-strong); border-radius: 3px; }
+.theme-color-input input { width: 24px; height: 22px; padding: 0; border: 1px solid var(--wb-border); border-radius: 3px; background: transparent; cursor: pointer; }
+.theme-color-input code { color: var(--wb-muted); font-family: var(--wb-mono-font); font-size: .51rem; text-transform: uppercase; }
+.theme-settings-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; color: var(--wb-muted); border-top: 1px solid var(--wb-border); font-size: .56rem; }
+.theme-reset-button { display: inline-flex; align-items: center; gap: 5px; padding: 5px 7px; border: 1px solid var(--wb-border); border-radius: 3px; color: var(--wb-muted); background: var(--wb-surface); cursor: pointer; font: inherit; font-size: .58rem; }
+.theme-reset-button:hover { color: var(--wb-text); border-color: var(--wb-border-strong); background: var(--wb-surface-hover); }
+
+@media (max-width: 760px) {
+  .theme-settings-backdrop { padding: 40px 5px 5px; }
+  .theme-settings { width: calc(100vw - 10px); }
+  .preset-grid { grid-template-columns: 1fr; }
+  .theme-color-grid { grid-template-columns: 1fr; }
+}

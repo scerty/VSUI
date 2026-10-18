@@ -1,0 +1,263 @@
+<div
+  class="workbench-shell"
+  [class.activity-hidden]="!configuration.activityBar"
+  [class.primary-hidden]="!configuration.primarySidebar || !layout.state().primarySidebarVisible"
+  [class.secondary-visible]="configuration.secondarySidebar && layout.state().secondarySidebarVisible"
+  [class.status-hidden]="!configuration.statusBar"
+  [class.bottom-hidden]="!configuration.bottomPanel || !layout.state().bottomPanelVisible"
+  [class.bottom-maximized]="configuration.bottomPanel && layout.state().bottomPanelMaximized"
+  [style.--wb-primary-width.px]="layout.state().primarySidebarWidth"
+  [style.--wb-secondary-width.px]="layout.state().secondarySidebarWidth"
+  [style.--wb-panel-height.px]="layout.state().bottomPanelHeight"
+>
+  <header class="title-bar">
+    <div class="title-bar-left">
+      <span class="app-logo" aria-hidden="true"><lucide-icon [img]="icons.fileText" [size]="15"></lucide-icon></span>
+      <span class="app-name">Workbench</span>
+      <nav class="menu-bar" aria-label="Application menu">
+        <button type="button">File</button>
+        <button type="button">Edit</button>
+        <button type="button">Selection</button>
+        <button type="button">View</button>
+        <button type="button">Go</button>
+        <button type="button">Help</button>
+      </nav>
+    </div>
+    <div class="window-title"><span>reference-workspace</span><span class="window-title-divider">-</span><span>Workbench</span></div>
+    <div class="title-bar-actions">
+      <button class="title-icon" type="button" aria-label="Toggle bottom panel" (click)="executeCommandById('workbench.toggle-bottom-panel')"><lucide-icon [img]="icons.panelBottom" [size]="15"></lucide-icon></button>
+      <button class="title-icon" type="button" aria-label="Reset workbench layout" (click)="executeCommandById('workbench.reset-layout')"><lucide-icon [img]="icons.reset" [size]="15"></lucide-icon></button>
+      <button class="title-icon" type="button" aria-label="Open theme settings" title="Theme settings" [attr.aria-expanded]="themeSettingsOpen()" (click)="toggleThemeSettings()"><lucide-icon [img]="icons.settings" [size]="15"></lucide-icon></button>
+      <button class="title-icon" type="button" [attr.aria-label]="theme() === 'light' ? 'Use dark theme' : 'Use light theme'" [attr.title]="theme() === 'light' ? 'Use dark theme' : 'Use light theme'" (click)="toggleTheme()"><lucide-icon [img]="theme() === 'light' ? icons.moon : icons.sun" [size]="15"></lucide-icon></button>
+      <button class="title-icon" type="button" aria-label="Account"><lucide-icon [img]="icons.user" [size]="15"></lucide-icon></button>
+      <button class="title-icon window-close" type="button" aria-label="Close window"><lucide-icon [img]="icons.close" [size]="15"></lucide-icon></button>
+    </div>
+  </header>
+
+  <div class="sidebar-group">
+    @if (configuration.activityBar) {
+      <nav class="activity-bar" aria-label="Workbench activities">
+        <div class="brand-mark" aria-label="Workbench"><lucide-icon [img]="icons.fileText" [size]="20"></lucide-icon></div>
+        <div class="activity-list">
+          @for (activity of registry.activities(); track activity.id) {
+            <button
+              class="activity-button"
+              [class.active]="contextService.context().activeActivityId === activity.id"
+              type="button"
+              [attr.aria-label]="activity.label"
+              [attr.title]="activity.label"
+              [attr.aria-pressed]="contextService.context().activeActivityId === activity.id"
+              (click)="selectActivity(activity.id)"
+            >
+              <lucide-icon class="activity-icon" [img]="activityIcons[activity.icon]" [size]="22"></lucide-icon>
+            </button>
+          }
+        </div>
+        <div class="activity-footer">
+          <button class="rail-icon" type="button" aria-label="Manage" title="Manage"><lucide-icon [img]="icons.settings" [size]="18"></lucide-icon></button>
+          <button class="rail-icon" type="button" aria-label="Account" title="Account"><lucide-icon [img]="icons.user" [size]="18"></lucide-icon></button>
+        </div>
+      </nav>
+    }
+
+    @if (configuration.primarySidebar) {
+      <aside #primarySidebar class="sidebar primary-sidebar" tabindex="-1" aria-label="Primary sidebar">
+        <div class="region-heading">
+          <span>EXPLORER</span>
+          <button class="sidebar-action" type="button" aria-label="More explorer actions"><lucide-icon [img]="icons.chevronDown" [size]="14"></lucide-icon></button>
+        </div>
+        <div class="region-content">
+          @if (activeView(); as view) {
+            <ng-container *ngComponentOutlet="view.component"></ng-container>
+          } @else {
+            <div class="empty-state compact-empty">
+              <strong>No view selected</strong>
+              <span>Choose an activity to begin.</span>
+            </div>
+          }
+        </div>
+      </aside>
+    }
+  </div>
+
+  @if (configuration.primarySidebar && layout.state().primarySidebarVisible) {
+    <button
+      class="layout-splitter vertical primary-splitter"
+      type="button"
+      role="separator"
+      aria-label="Resize primary sidebar"
+      [attr.aria-valuenow]="layout.state().primarySidebarWidth"
+      aria-valuemin="200"
+      aria-valuemax="480"
+      (pointerdown)="startResize('primarySidebar', $event)"
+      (keydown)="resizeWithKeyboard('primarySidebar', $event)"
+    ></button>
+  }
+
+  <main #mainWorkbench class="main-workbench" tabindex="-1">
+    <header class="topbar">
+      <div class="breadcrumb">
+        <span class="breadcrumb-root">{{ activeView()?.title ?? 'Welcome' }}</span>
+        <lucide-icon class="breadcrumb-divider" [img]="icons.chevronRight" [size]="13"></lucide-icon>
+        <span>{{ activeEditor()?.title ?? 'No file open' }}</span>
+      </div>
+      <div class="topbar-actions">
+        @if (configuration.commandPalette) {
+          <button class="command-trigger" type="button" (click)="openPalette()">
+            <lucide-icon class="command-icon" [img]="icons.search" [size]="14"></lucide-icon>
+            <span>Search</span>
+            <kbd>Ctrl+P</kbd>
+          </button>
+        }
+        @if (configuration.primarySidebar) {
+          <button class="icon-button" type="button" aria-label="Toggle primary sidebar" [attr.aria-pressed]="layout.state().primarySidebarVisible" (click)="executeCommandById('workbench.toggle-primary-sidebar')"><lucide-icon [img]="icons.files" [size]="15"></lucide-icon></button>
+        }
+        @if (configuration.secondarySidebar) {
+          <button class="icon-button" type="button" aria-label="Toggle secondary sidebar" [attr.aria-pressed]="layout.state().secondarySidebarVisible" (click)="executeCommandById('workbench.toggle-secondary-sidebar')"><lucide-icon [img]="icons.blocks" [size]="15"></lucide-icon></button>
+        }
+        @if (configuration.bottomPanel) {
+          <button
+            class="icon-button"
+            type="button"
+            aria-label="Toggle bottom panel"
+            [attr.aria-pressed]="layout.state().bottomPanelVisible"
+            (click)="executeCommandById('workbench.toggle-bottom-panel')"
+          >
+            <lucide-icon [img]="icons.panelBottom" [size]="15"></lucide-icon>
+          </button>
+        }
+      </div>
+    </header>
+
+    <section class="editor-area" aria-label="Editor area">
+      <div class="editor-tabs" role="tablist" aria-label="Open editors">
+        @for (editor of workspace.editors(); track editor.instanceId) {
+          <div class="editor-tab" [class.active]="editor.instanceId === workspace.activeEditorId()">
+            <button type="button" role="tab" [attr.aria-selected]="editor.instanceId === workspace.activeEditorId()" (click)="workspace.activateEditor(editor.instanceId)">
+              <lucide-icon class="tab-icon" [img]="icons.fileText" [size]="14"></lucide-icon>
+              <span>{{ editor.title }}</span>
+            </button>
+            <button class="tab-close" type="button" [attr.aria-label]="'Close ' + editor.title" (click)="workspace.closeEditor(editor.instanceId)"><lucide-icon [img]="icons.close" [size]="13"></lucide-icon></button>
+          </div>
+        }
+        @if (workspace.editors().length === 0) {
+          <span class="tabs-empty">No open editors</span>
+        }
+      </div>
+      <div class="editor-content">
+        @if (activeEditor(); as editor) {
+          <ng-container *ngComponentOutlet="editor.component; inputs: editor.inputs"></ng-container>
+        } @else {
+          <div class="empty-state editor-empty">
+            <div class="empty-glyph" aria-hidden="true"><lucide-icon [img]="icons.fileText" [size]="22"></lucide-icon></div>
+            <strong>Open a document to start</strong>
+            <span>Select a file in the explorer or run a command from the palette.</span>
+          </div>
+        }
+      </div>
+    </section>
+
+    @if (configuration.bottomPanel && layout.state().bottomPanelVisible && !layout.state().bottomPanelMaximized) {
+      <button
+        class="layout-splitter horizontal bottom-splitter"
+        type="button"
+        role="separator"
+        aria-label="Resize bottom panel"
+        [attr.aria-valuenow]="layout.state().bottomPanelHeight"
+        aria-valuemin="96"
+        aria-valuemax="520"
+        (pointerdown)="startResize('bottomPanel', $event)"
+        (keydown)="resizeWithKeyboard('bottomPanel', $event)"
+      ></button>
+    }
+
+    @if (configuration.bottomPanel && layout.state().bottomPanelVisible) {
+      <section #bottomPanel class="bottom-panel" tabindex="-1" aria-label="Bottom panel">
+        <div class="panel-heading">
+          <div class="panel-tabs" role="tablist" aria-label="Panel views">
+            @for (panel of bottomPanels(); track panel.id) {
+              <button class="panel-tab" [class.active]="activePanel().id === panel.id" type="button" role="tab" [attr.aria-selected]="activePanel().id === panel.id" (click)="layout.selectPanel(panel.id)">{{ panel.title }}</button>
+            }
+          </div>
+          <div class="panel-actions">
+            <button class="icon-button small" type="button" [attr.aria-label]="layout.state().bottomPanelMaximized ? 'Restore bottom panel' : 'Maximize bottom panel'" (click)="executeCommandById('workbench.toggle-maximize-panel')"><lucide-icon [img]="layout.state().bottomPanelMaximized ? icons.minimize : icons.maximize" [size]="13"></lucide-icon></button>
+            <button class="icon-button small" type="button" aria-label="Close bottom panel" (click)="executeCommandById('workbench.toggle-bottom-panel')"><lucide-icon [img]="icons.close" [size]="13"></lucide-icon></button>
+          </div>
+        </div>
+        @if (activePanel(); as panel) {
+          <ng-container *ngComponentOutlet="panel.component"></ng-container>
+        }
+      </section>
+    }
+  </main>
+
+  @if (configuration.secondarySidebar && layout.state().secondarySidebarVisible) {
+    <aside #secondarySidebar class="sidebar secondary-sidebar" tabindex="-1" aria-label="Secondary sidebar">
+      <div class="secondary-region-content">
+        @for (view of secondaryViews(); track view.id) {
+          <ng-container *ngComponentOutlet="view.component"></ng-container>
+        } @empty {
+          <div class="empty-state compact-empty"><strong>Nothing to show</strong><span>Secondary tools appear here.</span></div>
+        }
+      </div>
+    </aside>
+  }
+
+  @if (configuration.secondarySidebar && layout.state().secondarySidebarVisible) {
+    <button
+      class="layout-splitter vertical secondary-splitter"
+      type="button"
+      role="separator"
+      aria-label="Resize secondary sidebar"
+      [attr.aria-valuenow]="layout.state().secondarySidebarWidth"
+      aria-valuemin="220"
+      aria-valuemax="460"
+      (pointerdown)="startResize('secondarySidebar', $event)"
+      (keydown)="resizeWithKeyboard('secondarySidebar', $event)"
+    ></button>
+  }
+
+  @if (configuration.statusBar) {
+    <footer class="status-bar">
+      <span class="status-left"><span class="status-pulse"></span> Ready</span>
+      <span class="status-right"><span>{{ workspace.editors().length }} editor{{ workspace.editors().length === 1 ? '' : 's' }}</span><span>Workspace: {{ configuration.workspaceId }}</span></span>
+    </footer>
+  }
+</div>
+
+@if (themeSettingsOpen()) {
+  <workbench-theme-settings
+    [tokens]="themeColorTokens"
+    [colors]="themeColorValues()"
+    [presets]="themePresets"
+    [activePresetId]="activePresetId()"
+    (closed)="closeThemeSettings()"
+    (colorChanged)="updateThemeColor($event.key, $event.value)"
+    (presetSelected)="applyThemePreset($event)"
+    (reset)="resetCustomTheme()"
+  ></workbench-theme-settings>
+}
+
+@if (paletteOpen()) {
+  <div class="palette-backdrop" role="presentation" (click)="closePalette()">
+    <section class="command-palette" role="dialog" aria-modal="true" aria-label="Command Palette" (click)="$event.stopPropagation()">
+      <div class="palette-input-row">
+        <lucide-icon class="palette-search-icon" [img]="icons.search" [size]="17"></lucide-icon>
+        <input #paletteInput type="search" autofocus placeholder="Search commands" [ngModel]="paletteQuery()" (ngModelChange)="paletteQuery.set($event)" (keydown.escape)="closePalette()" />
+        <kbd>Esc</kbd>
+      </div>
+      <div class="palette-list">
+        @for (command of paletteCommands(); track command.id) {
+          <button type="button" class="palette-command" (click)="execute(command)">
+            <lucide-icon class="palette-command-icon" [img]="icons.command" [size]="15"></lucide-icon>
+            <span class="palette-command-copy"><strong>{{ command.title }}</strong><small>{{ command.category ?? 'Workbench' }}</small></span>
+            @if (command.keybinding) { <kbd>{{ command.keybinding }}</kbd> }
+          </button>
+        } @empty {
+          <div class="palette-empty">No commands match this search.</div>
+        }
+      </div>
+      @if (commandError(); as error) { <p class="palette-error" role="alert">{{ error }}</p> }
+    </section>
+  </div>
+}

@@ -1,0 +1,42 @@
+<div class="theme-settings-backdrop" role="presentation" (click)="closed.emit()">
+  <section class="theme-settings" role="dialog" aria-modal="true" aria-label="Theme settings" (click)="$event.stopPropagation()">
+    <header class="theme-settings-header">
+      <div>
+        <span class="theme-settings-eyebrow">APPEARANCE</span>
+        <h2>Custom theme</h2>
+        <p>Adjust the workbench palette and preview it instantly.</p>
+      </div>
+      <button class="icon-button small" type="button" aria-label="Close theme settings" title="Close" (click)="closed.emit()"><lucide-icon [img]="icons.close" [size]="14"></lucide-icon></button>
+    </header>
+    <section class="theme-presets" aria-label="Color presets">
+      <div class="theme-section-heading"><strong>Color presets</strong><small>Ready-made palettes</small></div>
+      <div class="preset-grid">
+        @for (preset of presets; track preset.id) {
+          <button class="preset-card" [class.active]="activePresetId === preset.id" type="button" [attr.aria-label]="'Use ' + preset.name + ' preset'" [attr.aria-pressed]="activePresetId === preset.id" (click)="presetSelected.emit(preset.id)">
+            <span class="preset-swatches">
+              @for (swatch of preset.swatches; track swatch) { <span [style.background]="swatch"></span> }
+            </span>
+            <span class="preset-copy"><strong>{{ preset.name }}</strong><small>{{ preset.description }}</small></span>
+            @if (activePresetId === preset.id) { <lucide-icon class="preset-check" [img]="icons.check" [size]="13"></lucide-icon> }
+          </button>
+        }
+      </div>
+    </section>
+    <div class="theme-color-grid">
+      @for (token of tokens; track token.key) {
+        <label class="theme-color-control">
+          <span class="theme-color-copy"><strong>{{ token.label }}</strong><small>{{ token.description }}</small></span>
+          <span class="theme-color-input">
+            <span class="theme-color-swatch" [style.background]="colors[token.key]"></span>
+            <input type="color" [value]="colors[token.key]" [attr.aria-label]="'Choose ' + token.label + ' color'" (input)="onColorInput(token.key, $event)" />
+            <code>{{ colors[token.key] }}</code>
+          </span>
+        </label>
+      }
+    </div>
+    <footer class="theme-settings-footer">
+      <span>Saved automatically</span>
+      <button class="theme-reset-button" type="button" (click)="reset.emit()"><lucide-icon [img]="icons.reset" [size]="13"></lucide-icon>Reset colors</button>
+    </footer>
+  </section>
+</div>

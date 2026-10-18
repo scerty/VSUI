@@ -1,0 +1,239 @@
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.layout-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.admin-minimal .shadow-2xl,
+.admin-minimal .shadow-lg,
+.admin-minimal .shadow-xl {
+  box-shadow: none !important;
+}
+
+.admin-minimal .rounded-3xl {
+  border-radius: 1rem;
+}
+
+.admin-minimal .rounded-2xl {
+  border-radius: 0.75rem;
+}
+
+.admin-minimal .rounded-xl {
+  border-radius: 0.625rem;
+}
+
+.rich-editor-shell {
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 0.75rem;
+  background: #111d2d;
+}
+
+.rich-editor-shell--light {
+  border-color: #dbe3ec;
+  background: #ffffff;
+}
+
+.rich-editor-shell--fullscreen {
+  position: fixed;
+  inset: 1rem;
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  background: #0d1726;
+}
+
+.rich-editor-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+  padding: 0.6rem 0.75rem;
+}
+
+.rich-editor-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: #fcd34d;
+}
+
+.rich-editor-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 0.4rem;
+  padding: 0.35rem 0.55rem;
+  color: #94a3b8;
+  font-size: 0.7rem;
+  transition: color 150ms ease, border-color 150ms ease, background 150ms ease;
+}
+
+.rich-editor-action:hover {
+  border-color: rgba(252, 211, 77, 0.45);
+  background: rgba(252, 211, 77, 0.08);
+  color: #fde68a;
+}
+
+.rich-editor-action svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.rich-editor-host {
+  min-height: 26rem;
+}
+
+.rich-editor-shell--fullscreen .rich-editor-host {
+  min-height: 0;
+  flex: 1;
+}
+
+.rich-editor-host .toastui-editor-defaultUI {
+  height: 100% !important;
+  border: 0 !important;
+  background: #111d2d !important;
+}
+
+.rich-editor-host .toastui-editor-toolbar,
+.rich-editor-host .toastui-editor-defaultUI-toolbar,
+.rich-editor-host .toastui-editor-mode-switch {
+  border-color: rgba(148, 163, 184, 0.18) !important;
+  background: #111d2d !important;
+}
+
+.rich-editor-host .toastui-editor-toolbar-icons {
+  border-color: transparent !important;
+  opacity: 0.78;
+}
+
+.rich-editor-host .toastui-editor-toolbar-icons:hover,
+.rich-editor-host .toastui-editor-toolbar-icons.active {
+  border-color: rgba(252, 211, 77, 0.4) !important;
+  background-color: rgba(252, 211, 77, 0.1) !important;
+}
+
+.rich-editor-host .toastui-editor-toolbar-icons {
+  filter: invert(0.82);
+}
+
+.rich-editor-host .toastui-editor-ww-container,
+.rich-editor-host .toastui-editor-md-container,
+.rich-editor-host .toastui-editor-md-preview {
+  background: #182538 !important;
+}
+
+.rich-editor-host .toastui-editor-contents,
+.rich-editor-host .toastui-editor-md-preview {
+  color: #dbe5f0 !important;
+  direction: rtl;
+  text-align: right;
+  font-family: "Tajawal", sans-serif !important;
+  font-size: 1rem;
+  line-height: 1.85;
+}
+
+.rich-editor-host .toastui-editor-md-container textarea {
+  color: #dbe5f0 !important;
+  direction: rtl;
+  font-family: "Tajawal", sans-serif !important;
+}
+
+.rich-editor-host .toastui-editor-contents p,
+.rich-editor-host .toastui-editor-contents h1,
+.rich-editor-host .toastui-editor-contents h2,
+.rich-editor-host .toastui-editor-contents h3 {
+  color: #dbe5f0 !important;
+}
+
+.rich-editor-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.18);
+  padding: 0.5rem 0.75rem;
+  color: #64748b;
+  font-size: 0.7rem;
+}
+
+@media (max-width: 640px) {
+  .rich-editor-shell--fullscreen {
+    inset: 0;
+    border-radius: 0;
+  }
+
+  .rich-editor-toolbar {
+    align-items: flex-start;
+  }
+
+  .rich-editor-toolbar > div:first-child > span:last-child {
+    display: none;
+  }
+}
+
+.rich-editor-shell--light .rich-editor-toolbar,
+.rich-editor-shell--light .rich-editor-status {
+  border-color: #e2e8f0;
+}
+
+.rich-editor-shell--light .rich-editor-toolbar {
+  background: #ffffff;
+}
+
+.rich-editor-shell--light .rich-editor-toolbar .text-slate-300 {
+  color: #334155;
+}
+
+.rich-editor-shell--light .rich-editor-toolbar .text-slate-500,
+.rich-editor-shell--light .rich-editor-status {
+  color: #64748b;
+}
+
+.rich-editor-shell--light .rich-editor-host .toastui-editor-defaultUI,
+.rich-editor-shell--light .rich-editor-host .toastui-editor-toolbar,
+.rich-editor-shell--light .rich-editor-host .toastui-editor-defaultUI-toolbar,
+.rich-editor-shell--light .rich-editor-host .toastui-editor-mode-switch {
+  border-color: #e2e8f0 !important;
+  background: #ffffff !important;
+}
+
+.rich-editor-shell--light .rich-editor-host .toastui-editor-ww-container,
+.rich-editor-shell--light .rich-editor-host .toastui-editor-md-container,
+.rich-editor-shell--light .rich-editor-host .toastui-editor-md-preview {
+  background: #f8fafc !important;
+}
+
+.rich-editor-shell--light .rich-editor-host .toastui-editor-contents,
+.rich-editor-shell--light .rich-editor-host .toastui-editor-md-preview,
+.rich-editor-shell--light .rich-editor-host .toastui-editor-contents p,
+.rich-editor-shell--light .rich-editor-host .toastui-editor-contents h1,
+.rich-editor-shell--light .rich-editor-host .toastui-editor-contents h2,
+.rich-editor-shell--light .rich-editor-host .toastui-editor-contents h3 {
+  color: #1e293b !important;
+}
+
+.rich-editor-shell--light .rich-editor-host .toastui-editor-md-container textarea {
+  color: #1e293b !important;
+}
+
+.rich-editor-shell--light .rich-editor-host .toastui-editor-toolbar-icons {
+  filter: none;
+}
